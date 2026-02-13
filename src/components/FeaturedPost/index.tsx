@@ -18,7 +18,11 @@ export function FeaturedPost() {
   return (
     <section className="mb-8 group grid grid-cols-1 gap-8 sm:grid-cols-2">
       <Post
-        post={post}
+        slug={post.slug}
+        coverImageUrl={post.coverImageUrl}
+        title={post.title}
+        createdAt={post.createdAt}
+        excerpt={post.excerpt}
         priority
         headingType="h2"
       />

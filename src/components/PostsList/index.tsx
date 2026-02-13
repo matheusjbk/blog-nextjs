@@ -12,7 +12,11 @@ export async function PostsList() {
             key={post.id}
           >
             <Post
-              post={post}
+              slug={post.slug}
+              coverImageUrl={post.coverImageUrl}
+              title={post.title}
+              createdAt={post.createdAt}
+              excerpt={post.excerpt}
               headingType="h3"
             />
           </div>

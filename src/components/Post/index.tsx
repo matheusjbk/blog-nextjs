@@ -1,16 +1,27 @@
-import { PostModel } from "@/models/post/postModel";
 import { PostHeading } from "../PostHeading";
 import { PostCoverImage } from "../PostImageCover";
 import { formatDate, formatRelativeDate } from "@/utils/formatDate";
 
 type PostProps = {
-  post: PostModel;
+  slug: string;
+  coverImageUrl: string;
+  title: string;
+  createdAt: string;
+  excerpt: string;
   priority?: boolean;
   headingType: "h1" | "h2" | "h3";
 };
 
-export function Post({ post, priority = false, headingType }: PostProps) {
-  const postLink = `/post/${post.slug}`;
+export function Post({
+  slug,
+  coverImageUrl,
+  title,
+  createdAt,
+  excerpt,
+  priority = false,
+  headingType,
+}: PostProps) {
+  const postLink = `/post/${slug}`;
 
   return (
     <>
@@ -19,8 +30,8 @@ export function Post({ post, priority = false, headingType }: PostProps) {
           href: postLink,
         }}
         imageProps={{
-          src: post.coverImageUrl,
-          alt: post.title,
+          src: coverImageUrl,
+          alt: title,
           width: 1200,
           height: 720,
           priority: priority,
@@ -29,19 +40,19 @@ export function Post({ post, priority = false, headingType }: PostProps) {
 
       <div className="flex flex-col gap-4 sm:justify-center">
         <time
-          dateTime="2026-02-12"
+          dateTime={createdAt}
           className="text-slate-600 text-sm/tight"
-          title={formatRelativeDate(post.createdAt)}
+          title={formatRelativeDate(createdAt)}
         >
-          {formatDate(post.createdAt)}
+          {formatDate(createdAt)}
         </time>
         <PostHeading
           url={postLink}
           as={headingType}
         >
-          {post.title}
+          {title}
         </PostHeading>
-        <p>{post.excerpt}</p>
+        <p>{excerpt}</p>
       </div>
     </>
   );
