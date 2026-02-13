@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className=""
+      className="dark"
     >
       <body>
         <Container>

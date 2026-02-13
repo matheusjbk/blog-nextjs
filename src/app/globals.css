@@ -1,2 +1,6 @@
 @import "tailwindcss";
+
+@source "../app"; /* Garante que tudo na pasta app seja escaneado */
+@source "../components";
+
 @custom-variant dark (&:where(.dark, .dark *));
