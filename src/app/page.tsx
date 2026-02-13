@@ -31,7 +31,12 @@ export default async function Home() {
           >
             12/02/2026 12:00
           </time>
-          <PostHeading as="h2">Título do post</PostHeading>
+          <PostHeading
+            url="#"
+            as="h2"
+          >
+            Título do post
+          </PostHeading>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
             eveniet, deserunt beatae inventore dignissimos reiciendis. Facere
