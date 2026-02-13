@@ -1,19 +1,9 @@
-import { PostModel } from "@/models/post/postModel";
 import { Post } from "../Post";
+import { findAllPublishedPosts } from "@/lib/queries";
 
-export function FeaturedPost() {
-  const post: PostModel = {
-    id: "123",
-    title: "Título do post",
-    slug: "titulo-do-post",
-    excerpt: "Post muito lindo artificial",
-    content: "Post muito lindo artificial",
-    coverImageUrl: "/images/bryen_0.png",
-    published: true,
-    createdAt: "2025-04-08T00:24:38.616Z",
-    updatedAt: "2025-04-08T00:33:56.907Z",
-    author: "Matheus Keher",
-  };
+export async function FeaturedPost() {
+  const posts = await findAllPublishedPosts();
+  const post = posts[0];
 
   return (
     <section className="mb-8 group grid grid-cols-1 gap-8 sm:grid-cols-2">

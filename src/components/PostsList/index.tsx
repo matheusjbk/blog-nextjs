@@ -1,11 +1,12 @@
-import { postRepository } from "@/repositories/post";
 import { Post } from "../Post";
+import { findAllPublishedPosts } from "@/lib/queries";
 
 export async function PostsList() {
-  const posts = await postRepository.findAll();
+  const posts = await findAllPublishedPosts();
+
   return (
     <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-      {posts.map(post => {
+      {posts.slice(1).map(post => {
         return (
           <div
             className="group flex flex-col gap-4"

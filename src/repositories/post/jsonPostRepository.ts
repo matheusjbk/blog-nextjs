@@ -32,7 +32,7 @@ export class JsonPostRepository implements PostRepository {
     await this.simulateWait();
 
     const posts = await this.readFromDisk();
-    return posts;
+    return posts.filter(post => post.published);
   }
 
   async findById(id: string): Promise<PostModel> {
