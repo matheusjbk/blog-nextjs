@@ -1,45 +1,27 @@
-import { PostHeading } from "../PostHeading";
-import { PostCoverImage } from "../PostImageCover";
+import { PostModel } from "@/models/post/postModel";
+import { Post } from "../Post";
 
 export function FeaturedPost() {
-  const slug = "";
-  const postLink = `/post/${slug}`;
+  const post: PostModel = {
+    id: "123",
+    title: "Título do post",
+    slug: "titulo-do-post",
+    excerpt: "Post muito lindo artificial",
+    content: "Post muito lindo artificial",
+    coverImageUrl: "/images/bryen_0.png",
+    published: true,
+    createdAt: "2025-04-08T00:24:38.616Z",
+    updatedAt: "2025-04-08T00:33:56.907Z",
+    author: "Matheus Keher",
+  };
 
   return (
     <section className="mb-8 group grid grid-cols-1 gap-8 sm:grid-cols-2">
-      <PostCoverImage
-        linkProps={{
-          href: postLink,
-        }}
-        imageProps={{
-          src: "/images/bryen_6.png",
-          alt: "Título do post",
-          width: 1200,
-          height: 720,
-          priority: true,
-        }}
+      <Post
+        post={post}
+        priority
+        headingType="h2"
       />
-
-      <div className="flex flex-col gap-4 sm:justify-center">
-        <time
-          dateTime="2026-02-12"
-          className="text-slate-600 text-sm/tight"
-        >
-          12/02/2026 12:00
-        </time>
-        <PostHeading
-          url={postLink}
-          as="h2"
-        >
-          Título do post
-        </PostHeading>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-          eveniet, deserunt beatae inventore dignissimos reiciendis. Facere sint
-          ipsum minima labore, velit tempora vel laboriosam. Maiores, nam! Illum
-          ex voluptatem cupiditate!
-        </p>
-      </div>
     </section>
   );
 }
