@@ -1,8 +1,8 @@
 import { Post } from "../Post";
-import { findAllPublishedPosts } from "@/lib/queries";
+import { findAllPublishedPostsCached } from "@/lib/queries";
 
 export async function FeaturedPost() {
-  const posts = await findAllPublishedPosts();
+  const posts = await findAllPublishedPostsCached();
   const post = posts[0];
 
   return (

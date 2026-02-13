@@ -1,8 +1,8 @@
 import { Post } from "../Post";
-import { findAllPublishedPosts } from "@/lib/queries";
+import { findAllPublishedPostsCached } from "@/lib/queries";
 
 export async function PostsList() {
-  const posts = await findAllPublishedPosts();
+  const posts = await findAllPublishedPostsCached();
 
   return (
     <div className="mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
