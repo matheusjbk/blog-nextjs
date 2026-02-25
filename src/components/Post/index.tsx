@@ -1,7 +1,6 @@
 import { PostDate } from "../PostDate";
 import { PostHeading } from "../PostHeading";
 import { PostCoverImage } from "../PostImageCover";
-import { formatDate, formatRelativeDate } from "@/utils/formatDate";
 
 type PostProps = {
   slug: string;

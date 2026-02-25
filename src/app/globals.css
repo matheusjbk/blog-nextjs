@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@plugin "@tailwindcss/typography";
+
 @source "../app"; /* Garante que tudo na pasta app seja escaneado */
 @source "../components";
 
