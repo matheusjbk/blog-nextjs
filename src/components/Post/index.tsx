@@ -1,3 +1,4 @@
+import { PostDate } from "../PostDate";
 import { PostHeading } from "../PostHeading";
 import { PostCoverImage } from "../PostImageCover";
 import { formatDate, formatRelativeDate } from "@/utils/formatDate";
@@ -39,13 +40,7 @@ export function Post({
       />
 
       <div className="flex flex-col gap-4 sm:justify-center">
-        <time
-          dateTime={createdAt}
-          className="text-slate-600 text-sm/tight dark:text-stone-500"
-          title={formatRelativeDate(createdAt)}
-        >
-          {formatDate(createdAt)}
-        </time>
+        <PostDate dateTime={createdAt} />
         <PostHeading
           url={postLink}
           as={headingType}
