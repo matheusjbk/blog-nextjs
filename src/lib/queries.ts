@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { cache } from "react";
 
 export const findAllPublishedPostsCached = cache(
-  async () => await postRepository.findAll(),
+  async () => await postRepository.findAllPublic(),
 );
 
 export const findPostByIdCached = cache(
