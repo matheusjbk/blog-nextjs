@@ -1,3 +1,6 @@
+// Este componente é um client component pois é usado dentro de um client component (RootErrorPage).
+"use client";
+
 type ErrorMessageProps = {
   pageTitle: string;
   contentTitle: string;
