@@ -5,11 +5,12 @@ import { PostHeading } from "../PostHeading";
 import { SafeMarkdown } from "../SafeMarkdown";
 
 type SinglePostProps = {
-  slug: string;
+  slug: Promise<{ slug: string }>;
 };
 
 export async function SinglePost({ slug }: SinglePostProps) {
-  const post = await findPostBySlugCached(slug);
+  const { slug: postSlug } = await slug;
+  const post = await findPostBySlugCached(postSlug);
 
   return (
     <article className="mb-16">

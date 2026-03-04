@@ -4,7 +4,9 @@ type PostDateProps = {
   dateTime: string;
 };
 
-export function PostDate({ dateTime }: PostDateProps) {
+export async function PostDate({ dateTime }: PostDateProps) {
+  "use cache";
+
   return (
     <time
       dateTime={dateTime}

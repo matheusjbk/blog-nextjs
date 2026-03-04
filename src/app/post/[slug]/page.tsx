@@ -21,7 +21,7 @@ export async function generateMetadata({
 }
 
 export default async function PostSlugPage({ params }: PostSlugPageProps) {
-  const { slug } = await params;
+  const slug = params;
 
   return (
     <Suspense fallback={<SpinLoader className="min-h-80 mb-16" />}>
