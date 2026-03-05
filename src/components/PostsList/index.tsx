@@ -1,5 +1,5 @@
 import { Post } from "../Post";
-import { findAllPublishedPostsCached } from "@/lib/queries";
+import { findAllPublishedPostsCached } from "@/lib/queries/public";
 
 export async function PostsList() {
   const posts = await findAllPublishedPostsCached();
