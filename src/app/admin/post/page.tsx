@@ -1,14 +1,16 @@
-import { findAllPostsAdmin } from "@/lib/queries/admin";
+import PostsListAdmin from "@/components/PostsListAdmin";
+import { SpinLoader } from "@/components/SpinLoader";
+import { Metadata } from "next";
+import { Suspense } from "react";
+
+export const metadata: Metadata = {
+  title: "Admin - Posts",
+};
 
 export default async function AdminPostPage() {
-  const posts = await findAllPostsAdmin();
-
   return (
-    <div>
-      <h1 className="py-16 text-6xl">AdminPostPage</h1>
-      {posts.map(post => {
-        return <p key={post.id}>{post.title}</p>;
-      })}
-    </div>
+    <Suspense fallback={<SpinLoader className="mb-16" />}>
+      <PostsListAdmin />
+    </Suspense>
   );
 }
