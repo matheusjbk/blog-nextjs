@@ -4,6 +4,8 @@ import { drizzleDb } from "@/db/drizzle";
 import { logColor } from "@/utils/logColor";
 import { simulateDelay } from "@/utils/simulateDelay";
 import { SIMULATE_WAIT_IN_MS } from "@/lib/constants";
+import { eq } from "drizzle-orm";
+import { postsTable } from "@/db/drizzle/schemas";
 
 export class DrizzlePostRepository implements PostRepository {
   async findAllPublic(): Promise<PostModel[]> {
@@ -58,5 +60,15 @@ export class DrizzlePostRepository implements PostRepository {
     if (!post) throw new Error("Post não encontrado");
 
     return post;
+  }
+
+  async delete(post: PostModel): Promise<{ success: boolean }> {
+    await simulateDelay(SIMULATE_WAIT_IN_MS, true);
+
+    logColor("delete", Date.now());
+
+    await drizzleDb.delete(postsTable).where(eq(postsTable.id, post.id));
+
+    return { success: true };
   }
 }

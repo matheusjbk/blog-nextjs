@@ -4,6 +4,8 @@ import { findAllPublishedPostsCached } from "@/lib/queries/public";
 export async function PostsList() {
   const posts = await findAllPublishedPostsCached();
 
+  if (posts.length <= 1) return null;
+
   return (
     <div className="mb-16 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
       {posts.slice(1).map(post => {

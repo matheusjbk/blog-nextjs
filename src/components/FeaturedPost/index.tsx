@@ -1,8 +1,18 @@
+import { ErrorMessage } from "../ErrorMessage";
 import { Post } from "../Post";
 import { findAllPublishedPostsCached } from "@/lib/queries/public";
 
 export async function FeaturedPost() {
   const posts = await findAllPublishedPostsCached();
+
+  if (posts.length === 0)
+    return (
+      <ErrorMessage
+        contentTitle="Ops!"
+        content="Ainda não criamos nenhum post."
+      />
+    );
+
   const post = posts[0];
 
   return (
