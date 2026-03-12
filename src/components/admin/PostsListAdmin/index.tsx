@@ -1,6 +1,6 @@
 import { findAllPostsAdmin } from "@/lib/queries/admin";
-import { Trash2Icon } from "lucide-react";
 import Link from "next/link";
+import { DeletePostButton } from "../DeletePostButton";
 
 export default async function PostsListAdmin() {
   const posts = await findAllPostsAdmin();
@@ -21,13 +21,10 @@ export default async function PostsListAdmin() {
               </span>
             )}
 
-            <button
-              className="text-red-500 cursor-pointer [&_svg]:w-6 [&_svg]:h-6 transition hover:scale-120 hover:text-red-700"
-              aria-label={`Apagar o post: ${post.title}`}
-              title={`Apagar o post: ${post.title}`}
-            >
-              <Trash2Icon />
-            </button>
+            <DeletePostButton
+              id={post.id}
+              title={post.title}
+            />
           </div>
         );
       })}
