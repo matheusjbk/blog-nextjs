@@ -3,6 +3,7 @@ import "./globals.css";
 import { Container } from "@/components/Container";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { MessagesContainer } from "@/components/MessagesContainer";
 
 export const metadata: Metadata = {
   title: {
@@ -30,6 +31,8 @@ export default function RootLayout({
 
           <Footer />
         </Container>
+
+        <MessagesContainer />
       </body>
     </html>
   );

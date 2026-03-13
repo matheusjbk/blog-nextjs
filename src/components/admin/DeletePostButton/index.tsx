@@ -1,6 +1,7 @@
 "use client";
 
 import { deletePostAction } from "@/actions/deletePostAction";
+import { showMessage } from "@/adapters/showMessage";
 import { Dialog } from "@/components/Dialog";
 import { Trash2Icon } from "lucide-react";
 import { useState, useTransition } from "react";
@@ -19,11 +20,18 @@ export function DeletePostButton({ id, title }: DeletePostButtonProps) {
   }
 
   function handleConfirm() {
+    showMessage.dismiss();
+
     startTransition(async () => {
       const result = await deletePostAction(id);
       setShowDialog(false);
 
-      if (result.error) alert(`Erro: ${result.error}`);
+      if (result.error) {
+        showMessage.error(result.error);
+        return;
+      }
+
+      showMessage.success("Post apagado com sucesso!");
     });
   }
 

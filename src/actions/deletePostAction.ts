@@ -2,7 +2,7 @@
 
 import { postRepository } from "@/repositories/post";
 import { logColor } from "@/utils/logColor";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
   // TODO: verificar login do usuário
@@ -20,7 +20,6 @@ export async function deletePostAction(id: string) {
   if (result.success) {
     revalidateTag("posts", "max");
     revalidateTag(`post-${post.slug}`, "max");
-    revalidatePath(`/admin/posts`);
   }
 
   return { error: "" };
