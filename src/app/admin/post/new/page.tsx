@@ -1,9 +1,12 @@
+import { InputCheckbox } from "@/components/InputCheckbox";
 import { InputText } from "@/components/InputText";
 
 export default async function AdminNewPostPage() {
   return (
     <>
       <div className="">
+        <InputCheckbox labelText="Publicado" />
+
         <InputText
           labelText="Nome"
           placeholder="Digite o seu nome"
