@@ -22,6 +22,7 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       className=""
+      data-color-mode="light"
     >
       <body>
         <Container>
