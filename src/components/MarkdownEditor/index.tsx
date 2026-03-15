@@ -27,7 +27,7 @@ export function MarkdownEditor({
   const id = useId();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1">
       {labelText && (
         <label
           className="text-sm"
