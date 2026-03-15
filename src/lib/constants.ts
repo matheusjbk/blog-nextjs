@@ -1,1 +1,2 @@
 export const SIMULATE_WAIT_IN_MS = 500;
+export const IMAGE_MAX_SIZE_IN_BYTES = 921600; // 900KB * 1024 = 921600B

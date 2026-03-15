@@ -1,4 +1,6 @@
+import { showMessage } from "@/adapters/showMessage";
 import { Button } from "@/components/Button";
+import { IMAGE_MAX_SIZE_IN_BYTES } from "@/lib/constants";
 import { ImageUpIcon } from "lucide-react";
 import { useRef } from "react";
 
@@ -9,6 +11,30 @@ export function ImageUploader() {
     if (!fileInputRef.current) return;
 
     fileInputRef.current.click();
+  }
+
+  function handleFileChange() {
+    if (!fileInputRef.current) return;
+
+    const fileInput = fileInputRef.current;
+
+    const file = fileInput.files?.[0];
+
+    if (!file) return;
+
+    if (file.size > IMAGE_MAX_SIZE_IN_BYTES) {
+      const maxSizeInKB = IMAGE_MAX_SIZE_IN_BYTES / 1024;
+      showMessage.error(
+        `Imagem muito grande. O tamanho máximo permitido é de ${maxSizeInKB}KB`,
+      );
+
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    fileInput.value = "";
   }
 
   return (
@@ -25,6 +51,7 @@ export function ImageUploader() {
       </Button>
 
       <input
+        onChange={handleFileChange}
         ref={fileInputRef}
         className="hidden"
         type="file"
