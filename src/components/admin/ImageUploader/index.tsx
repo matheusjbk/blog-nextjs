@@ -1,10 +1,13 @@
+import { uploadImageAction } from "@/actions/upload/uploadImageAction";
 import { showMessage } from "@/adapters/showMessage";
 import { Button } from "@/components/Button";
 import { IMAGE_MAX_SIZE_IN_BYTES } from "@/lib/constants";
 import { ImageUpIcon } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useTransition } from "react";
 
 export function ImageUploader() {
+  const [isUploading, startTransition] = useTransition();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   function handleClick() {
@@ -14,6 +17,8 @@ export function ImageUploader() {
   }
 
   function handleFileChange() {
+    showMessage.dismiss();
+
     if (!fileInputRef.current) return;
 
     const fileInput = fileInputRef.current;
@@ -33,6 +38,18 @@ export function ImageUploader() {
 
     const formData = new FormData();
     formData.append("image", file);
+
+    startTransition(async () => {
+      const result = await uploadImageAction(formData);
+
+      if (result.error) {
+        showMessage.error(result.error);
+
+        return;
+      }
+
+      showMessage.success(result.url);
+    });
 
     fileInput.value = "";
   }
