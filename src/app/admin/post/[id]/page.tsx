@@ -1,3 +1,12 @@
+import { ManagePostForm } from "@/components/admin/ManagePostForm";
+import { makePostDto } from "@/dto/post/postDto";
+import { findPostByIdAdmin } from "@/lib/queries/admin";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Editar Post",
+};
+
 type AdminPostIdPageProps = {
   params: Promise<{ id: string }>;
 };
@@ -7,9 +16,14 @@ export default async function AdminPostIdPage({
 }: AdminPostIdPageProps) {
   const { id } = await params;
 
+  const post = await findPostByIdAdmin(id);
+
+  const postDto = makePostDto(post);
+
   return (
-    <div>
-      <h1 className="py-16 text-6xl">AdminPostIdPage {id}</h1>
-    </div>
+    <>
+      <h1 className="text-3xl font-bold mb-6">Editar Post</h1>
+      <ManagePostForm postDto={postDto} />
+    </>
   );
 }
