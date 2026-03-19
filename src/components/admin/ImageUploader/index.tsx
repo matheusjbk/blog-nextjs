@@ -3,10 +3,11 @@ import { showMessage } from "@/adapters/showMessage";
 import { Button } from "@/components/Button";
 import { IMAGE_MAX_SIZE_IN_BYTES } from "@/lib/constants";
 import { ImageUpIcon } from "lucide-react";
-import { useRef, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 
 export function ImageUploader() {
   const [isUploading, startTransition] = useTransition();
+  const [imgUrl, setImgUrl] = useState("");
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -48,20 +49,22 @@ export function ImageUploader() {
         return;
       }
 
-      showMessage.success(result.url);
+      setImgUrl(result.url);
+      showMessage.success("Imagem enviada com sucesso");
     });
 
     fileInput.value = "";
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-4">
       <Button
         onClick={handleClick}
         color="default"
         size="md"
         type="button"
         className="self-start"
+        disabled={isUploading}
       >
         <ImageUpIcon />
         Escolher imagem
@@ -73,7 +76,17 @@ export function ImageUploader() {
         className="hidden"
         type="file"
         accept="image/*"
+        disabled={isUploading}
       />
+
+      {imgUrl && (
+        <div className="flex flex-col gap-2">
+          <p>URL da imagem: {imgUrl}</p>
+
+          {/* eslint-disable-next-line */}
+          <img src={imgUrl} />
+        </div>
+      )}
     </div>
   );
 }
