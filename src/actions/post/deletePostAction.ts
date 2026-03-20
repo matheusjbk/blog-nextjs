@@ -1,26 +1,25 @@
 "use server";
 
 import { postRepository } from "@/repositories/post";
-import { logColor } from "@/utils/logColor";
 import { revalidateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
   // TODO: verificar login do usuário
 
-  logColor(`${id}`);
-
   if (!id || typeof id !== "string") return { error: "Dados inválidos" };
 
-  const post = await postRepository.findById(id).catch(() => undefined);
+  let post;
 
-  if (!post) return { error: "Post não encontrado" };
+  try {
+    post = await postRepository.delete(id);
+  } catch (e: unknown) {
+    if (e instanceof Error) return { error: e.message };
 
-  const result = await postRepository.delete(post);
-
-  if (result.success) {
-    revalidateTag("posts", "max");
-    revalidateTag(`post-${post.slug}`, "max");
+    return { error: "Erro desconhecido" };
   }
+
+  revalidateTag("posts", "max");
+  revalidateTag(`post-${post.slug}`, "max");
 
   return { error: "" };
 }

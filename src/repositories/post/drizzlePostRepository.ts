@@ -62,23 +62,73 @@ export class DrizzlePostRepository implements PostRepository {
     return post;
   }
 
-  async create(post: PostModel): Promise<{ success: boolean }> {
+  async create(post: PostModel): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
 
     logColor("create", Date.now());
 
+    const postExists = await drizzleDb.query.posts.findFirst({
+      where: (posts, { or, eq }) =>
+        or(eq(posts.id, post.id), eq(posts.slug, post.slug)),
+    });
+
+    if (postExists) throw new Error("ID ou Slug já existente na base de dados");
+
     await drizzleDb.insert(postsTable).values(post);
 
-    return { success: true };
+    return post;
   }
 
-  async delete(post: PostModel): Promise<{ success: boolean }> {
+  async update(
+    id: string,
+    newPostData: Omit<PostModel, "id" | "slug" | "createdAt" | "updatedAt">,
+  ): Promise<PostModel> {
+    await simulateDelay(SIMULATE_WAIT_IN_MS, true);
+
+    logColor("update", Date.now());
+
+    const oldPost = await drizzleDb.query.posts.findFirst({
+      where: (posts, { eq }) => eq(posts.id, id),
+    });
+
+    if (!oldPost) throw new Error("Post não encontrado");
+
+    const updatedAt = new Date().toISOString();
+
+    const postData = {
+      author: newPostData.author,
+      title: newPostData.title,
+      excerpt: newPostData.excerpt,
+      content: newPostData.content,
+      coverImageUrl: newPostData.coverImageUrl,
+      published: newPostData.published,
+      updatedAt,
+    };
+
+    await drizzleDb
+      .update(postsTable)
+      .set(postData)
+      .where(eq(postsTable.id, id));
+
+    return {
+      ...oldPost,
+      ...postData,
+    };
+  }
+
+  async delete(id: string): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
 
     logColor("delete", Date.now());
 
-    await drizzleDb.delete(postsTable).where(eq(postsTable.id, post.id));
+    const postExists = await drizzleDb.query.posts.findFirst({
+      where: (posts, { eq }) => eq(posts.id, id),
+    });
 
-    return { success: true };
+    if (!postExists) throw new Error("Post não encontrado");
+
+    await drizzleDb.delete(postsTable).where(eq(postsTable.id, id));
+
+    return postExists;
   }
 }

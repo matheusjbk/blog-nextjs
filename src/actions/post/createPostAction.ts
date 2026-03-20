@@ -52,7 +52,20 @@ export async function createPostAction(
     updatedAt: postCreationDate,
   };
 
-  const result = await postRepository.create(newPost);
+  try {
+    await postRepository.create(newPost);
+  } catch (e: unknown) {
+    if (e instanceof Error)
+      return {
+        formState: newPost,
+        errors: [e.message],
+      };
+
+    return {
+      formState: newPost,
+      errors: ["Erro desconhecido"],
+    };
+  }
 
   revalidateTag("posts", "max");
 
