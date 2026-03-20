@@ -22,7 +22,6 @@ export async function createPostAction(
 
   const formDataToObj = Object.fromEntries(formData.entries());
   console.log(formDataToObj);
-  console.log(formData.get("published"));
 
   return {
     formState: state.formState,
