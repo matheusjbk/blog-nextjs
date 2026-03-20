@@ -1,6 +1,11 @@
 "use server";
 
-import { PostDto } from "@/dto/post/postDto";
+import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
+import { PostCreateSchema } from "@/lib/validations";
+import { PostModel } from "@/models/post/postModel";
+import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
+import { makeSlugFromText } from "@/utils/makeSlugFromText";
+import { v4 as uuidV4 } from "uuid";
 
 type CreatePostActionState = {
   formState: PostDto;
@@ -21,10 +26,31 @@ export async function createPostAction(
   }
 
   const formDataToObj = Object.fromEntries(formData.entries());
-  console.log(formDataToObj);
+
+  const zodParsedObj = PostCreateSchema.safeParse(formDataToObj);
+
+  if (!zodParsedObj.success) {
+    const errors = getZodErrorMessages(zodParsedObj.error);
+
+    return {
+      formState: makePartialPostDto(formDataToObj),
+      errors,
+    };
+  }
+
+  const validPostData = zodParsedObj.data;
+  const postCreationDate = new Date().toISOString();
+
+  const newPost: PostModel = {
+    ...validPostData,
+    id: uuidV4(),
+    slug: makeSlugFromText(validPostData.title),
+    createdAt: postCreationDate,
+    updatedAt: postCreationDate,
+  };
 
   return {
-    formState: state.formState,
+    formState: newPost,
     errors: [],
   };
 }

@@ -4,10 +4,11 @@ import { Button } from "@/components/Button";
 import { InputCheckbox } from "@/components/InputCheckbox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { ImageUploader } from "../ImageUploader";
 import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
 import { createPostAction } from "@/actions/post/createPostAction";
+import { showMessage } from "@/adapters/showMessage";
 
 type ManagePostFormProps = {
   postDto?: PostDto;
@@ -27,6 +28,13 @@ export function ManagePostForm({ postDto }: ManagePostFormProps) {
   const { formState } = state;
 
   const [contentValue, setContentValue] = useState(formState.content);
+
+  useEffect(() => {
+    showMessage.dismiss();
+
+    if (state.errors.length > 0)
+      state.errors.forEach(error => showMessage.error(error));
+  }, [state.errors]);
 
   return (
     <form
