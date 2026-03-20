@@ -62,6 +62,16 @@ export class DrizzlePostRepository implements PostRepository {
     return post;
   }
 
+  async create(post: PostModel): Promise<{ success: boolean }> {
+    await simulateDelay(SIMULATE_WAIT_IN_MS, true);
+
+    logColor("create", Date.now());
+
+    await drizzleDb.insert(postsTable).values(post);
+
+    return { success: true };
+  }
+
   async delete(post: PostModel): Promise<{ success: boolean }> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
 

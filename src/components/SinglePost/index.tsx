@@ -1,5 +1,5 @@
 import { findPublishedPostBySlugCached } from "@/lib/queries/public";
-import Image from "next/image";
+// import Image from "next/image";
 import { PostDate } from "../PostDate";
 import { PostHeading } from "../PostHeading";
 import { SafeMarkdown } from "../SafeMarkdown";
@@ -15,7 +15,14 @@ export async function SinglePost({ slug }: SinglePostProps) {
   return (
     <article className="mb-16">
       <header className="flex flex-col gap-4 mb-4">
-        <Image
+        {/* <Image
+          className="rounded-xl"
+          src={post.coverImageUrl}
+          alt={post.title}
+          width={1200}
+          height={720}
+        /> */}
+        <img
           className="rounded-xl"
           src={post.coverImageUrl}
           alt={post.title}

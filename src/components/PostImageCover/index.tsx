@@ -1,9 +1,9 @@
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 
 type PostCoverImageProps = {
   linkProps: React.ComponentProps<typeof Link>;
-  imageProps: React.ComponentProps<typeof Image>;
+  imageProps: React.ComponentProps<"img">;
 };
 
 export function PostCoverImage({ linkProps, imageProps }: PostCoverImageProps) {
@@ -12,7 +12,12 @@ export function PostCoverImage({ linkProps, imageProps }: PostCoverImageProps) {
       {...linkProps}
       className="w-full h-full overflow-hidden rounded-xl"
     >
-      <Image
+      {/* <Image
+        {...imageProps}
+        alt={imageProps.alt}
+        className="w-full h-full object-cover object-center group-hover:scale-105 transition"
+      /> */}
+      <img
         {...imageProps}
         alt={imageProps.alt}
         className="w-full h-full object-cover object-center group-hover:scale-105 transition"

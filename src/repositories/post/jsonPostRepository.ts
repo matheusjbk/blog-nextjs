@@ -54,6 +54,11 @@ export class JsonPostRepository implements PostRepository {
     return post;
   }
 
+  async create(post: PostModel): Promise<{ success: boolean }> {
+    // Implementation for deleting a post from JSON file
+    return { success: true };
+  }
+
   async delete(post: PostModel): Promise<{ success: boolean }> {
     // Implementation for deleting a post from JSON file
     return { success: true };

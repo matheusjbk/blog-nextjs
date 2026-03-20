@@ -3,8 +3,11 @@
 import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
 import { PostCreateSchema } from "@/lib/validations";
 import { PostModel } from "@/models/post/postModel";
+import { postRepository } from "@/repositories/post";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
 import { makeSlugFromText } from "@/utils/makeSlugFromText";
+import { revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { v4 as uuidV4 } from "uuid";
 
 type CreatePostActionState = {
@@ -49,8 +52,9 @@ export async function createPostAction(
     updatedAt: postCreationDate,
   };
 
-  return {
-    formState: newPost,
-    errors: [],
-  };
+  const result = await postRepository.create(newPost);
+
+  revalidateTag("posts", "max");
+
+  redirect("/admin/post");
 }

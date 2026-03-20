@@ -34,7 +34,7 @@ export function Post({
           alt: title,
           width: 1200,
           height: 720,
-          priority: priority,
+          // priority: priority,
         }}
       />
 
