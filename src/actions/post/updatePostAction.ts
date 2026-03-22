@@ -3,13 +3,14 @@
 import { makePartialPostDto, makePostDto, PostDto } from "@/dto/post/postDto";
 import { PostUpdateSchema } from "@/lib/validations";
 import { postRepository } from "@/repositories/post";
+import { generateRandomString } from "@/utils/generateRandomString";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
 import { revalidateTag } from "next/cache";
 
 type UpdatePostActionState = {
   formState: PostDto;
   errors: string[];
-  success?: true;
+  success?: string;
 };
 
 export async function updatePostAction(
@@ -75,6 +76,6 @@ export async function updatePostAction(
   return {
     formState: makePostDto(post),
     errors: [],
-    success: true,
+    success: generateRandomString(),
   };
 }

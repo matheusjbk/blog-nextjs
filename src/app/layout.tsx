@@ -4,6 +4,8 @@ import { Container } from "@/components/Container";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MessagesContainer } from "@/components/MessagesContainer";
+import { CreatedPostToatListener } from "@/components/admin/CreatedPostToastListener";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: {
@@ -33,6 +35,9 @@ export default function RootLayout({
           <Footer />
         </Container>
 
+        <Suspense fallback={null}>
+          <CreatedPostToatListener />
+        </Suspense>
         <MessagesContainer />
       </body>
     </html>
