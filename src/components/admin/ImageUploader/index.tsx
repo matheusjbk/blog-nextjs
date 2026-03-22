@@ -5,7 +5,11 @@ import { IMAGE_MAX_SIZE_IN_BYTES } from "@/lib/constants";
 import { ImageUpIcon } from "lucide-react";
 import { useRef, useState, useTransition } from "react";
 
-export function ImageUploader() {
+type ImageUploaderProps = {
+  disabled?: boolean;
+};
+
+export function ImageUploader({ disabled = false }: ImageUploaderProps) {
   const [isUploading, startTransition] = useTransition();
   const [imgUrl, setImgUrl] = useState("");
 
@@ -64,7 +68,7 @@ export function ImageUploader() {
         size="md"
         type="button"
         className="self-start"
-        disabled={isUploading}
+        disabled={isUploading || disabled}
       >
         <ImageUpIcon />
         Escolher imagem
@@ -76,7 +80,7 @@ export function ImageUploader() {
         className="hidden"
         type="file"
         accept="image/*"
-        disabled={isUploading}
+        disabled={isUploading || disabled}
       />
 
       {imgUrl && (

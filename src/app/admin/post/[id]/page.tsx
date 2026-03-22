@@ -23,7 +23,10 @@ export default async function AdminPostIdPage({
   return (
     <>
       <h1 className="text-3xl font-bold mb-6">Editar Post</h1>
-      <ManagePostForm postDto={postDto} />
+      <ManagePostForm
+        mode="update"
+        postDto={postDto}
+      />
     </>
   );
 }
