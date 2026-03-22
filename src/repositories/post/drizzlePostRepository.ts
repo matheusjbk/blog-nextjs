@@ -1,7 +1,6 @@
 import { PostModel } from "@/models/post/postModel";
 import { PostRepository } from "./postRepository";
 import { drizzleDb } from "@/db/drizzle";
-import { logColor } from "@/utils/logColor";
 import { simulateDelay } from "@/utils/simulateDelay";
 import { SIMULATE_WAIT_IN_MS } from "@/lib/constants";
 import { eq } from "drizzle-orm";
@@ -10,8 +9,6 @@ import { postsTable } from "@/db/drizzle/schemas";
 export class DrizzlePostRepository implements PostRepository {
   async findAllPublic(): Promise<PostModel[]> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("findAllPublic", Date.now());
 
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
@@ -23,8 +20,6 @@ export class DrizzlePostRepository implements PostRepository {
 
   async findBySlugPublic(slug: string): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("findBySlugPublic", Date.now());
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (post, { eq, and }) =>
@@ -39,8 +34,6 @@ export class DrizzlePostRepository implements PostRepository {
   async findAll(): Promise<PostModel[]> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
 
-    logColor("findAll", Date.now());
-
     const posts = await drizzleDb.query.posts.findMany({
       orderBy: (posts, { desc }) => desc(posts.createdAt),
     });
@@ -50,8 +43,6 @@ export class DrizzlePostRepository implements PostRepository {
 
   async findById(id: string): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("findById", Date.now());
 
     const post = await drizzleDb.query.posts.findFirst({
       where: (post, { eq }) => eq(post.id, id),
@@ -64,8 +55,6 @@ export class DrizzlePostRepository implements PostRepository {
 
   async create(post: PostModel): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("create", Date.now());
 
     const postExists = await drizzleDb.query.posts.findFirst({
       where: (posts, { or, eq }) =>
@@ -84,8 +73,6 @@ export class DrizzlePostRepository implements PostRepository {
     newPostData: Omit<PostModel, "id" | "slug" | "createdAt" | "updatedAt">,
   ): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("update", Date.now());
 
     const oldPost = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),
@@ -118,8 +105,6 @@ export class DrizzlePostRepository implements PostRepository {
 
   async delete(id: string): Promise<PostModel> {
     await simulateDelay(SIMULATE_WAIT_IN_MS, true);
-
-    logColor("delete", Date.now());
 
     const postExists = await drizzleDb.query.posts.findFirst({
       where: (posts, { eq }) => eq(posts.id, id),

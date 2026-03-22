@@ -1,9 +1,7 @@
 import { PostModel } from "@/models/post/postModel";
 import { PostRepository } from "./postRepository";
 import { resolve } from "path";
-import { readFile } from "fs/promises";
-import { SIMULATE_WAIT_IN_MS } from "@/lib/constants";
-import { simulateDelay } from "@/utils/simulateDelay";
+import { readFile, writeFile } from "fs/promises";
 
 const ROOT_DIR = process.cwd();
 const JSON_POSTS_FILE_PATH = resolve(
@@ -22,9 +20,12 @@ export class JsonPostRepository implements PostRepository {
     return posts;
   }
 
-  async findAllPublic(): Promise<PostModel[]> {
-    await simulateDelay(SIMULATE_WAIT_IN_MS);
+  private async writeToDisk(posts: PostModel[]): Promise<void> {
+    const jsonToString = JSON.stringify({ posts }, null, 2);
+    await writeFile(JSON_POSTS_FILE_PATH, jsonToString, "utf-8");
+  }
 
+  async findAllPublic(): Promise<PostModel[]> {
     const posts = await this.readFromDisk();
     return posts.filter(post => post.published);
   }
@@ -39,8 +40,6 @@ export class JsonPostRepository implements PostRepository {
   }
 
   async findAll(): Promise<PostModel[]> {
-    await simulateDelay(SIMULATE_WAIT_IN_MS);
-
     const posts = await this.readFromDisk();
     return posts;
   }
@@ -55,12 +54,59 @@ export class JsonPostRepository implements PostRepository {
   }
 
   async create(post: PostModel): Promise<PostModel> {
-    // Implementation for deleting a post from JSON file
+    const posts = await this.findAll();
+
+    if (!post.id || !post.slug) throw new Error("Post sem ID ou Slug");
+
+    const idOrSlugExist = posts.find(
+      savedPost => savedPost.id === post.id || savedPost.slug === post.slug,
+    );
+
+    if (idOrSlugExist) throw new Error("ID ou Slug devem ser únicos");
+
+    posts.push(post);
+
+    await this.writeToDisk(posts);
+
     return post;
   }
 
+  async update(
+    id: string,
+    newPostData: Omit<PostModel, "id" | "slug" | "createdAt" | "updatedAt">,
+  ): Promise<PostModel> {
+    const posts = await this.findAll();
+    const postIndex = posts.findIndex(p => p.id === id);
+
+    if (postIndex > 0) throw new Error("Post não existe");
+
+    const savedPost = posts[postIndex];
+
+    const newPost = {
+      ...savedPost,
+      newPostData,
+      updatedAt: new Date().toISOString(),
+    };
+
+    posts[postIndex] = newPost;
+
+    await this.writeToDisk(posts);
+
+    return newPost;
+  }
+
   async delete(id: string): Promise<PostModel> {
-    // Implementation for deleting a post from JSON file
-    return {};
+    const posts = await this.findAll();
+    const postIndex = posts.findIndex(p => p.id === id);
+
+    if (postIndex > 0) throw new Error("Post não existe");
+
+    const post = posts[postIndex];
+
+    posts.slice(postIndex, 1);
+
+    await this.writeToDisk(posts);
+
+    return post;
   }
 }
