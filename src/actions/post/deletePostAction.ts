@@ -1,10 +1,16 @@
 "use server";
 
+import { verifiyLoginSession } from "@/lib/login/manage-login";
 import { postRepository } from "@/repositories/post";
 import { revalidateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
-  // TODO: verificar login do usuário
+  const isAuthenticated = await verifiyLoginSession();
+
+  if (!isAuthenticated)
+    return {
+      error: "Faça login novamente em outra aba antes de excluir um post",
+    };
 
   if (!id || typeof id !== "string") return { error: "Dados inválidos" };
 

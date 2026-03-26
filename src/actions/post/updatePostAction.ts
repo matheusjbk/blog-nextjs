@@ -1,6 +1,7 @@
 "use server";
 
 import { makePartialPostDto, makePostDto, PostDto } from "@/dto/post/postDto";
+import { verifiyLoginSession } from "@/lib/login/manage-login";
 import { PostUpdateSchema } from "@/lib/validations";
 import { postRepository } from "@/repositories/post";
 import { generateRandomString } from "@/utils/generateRandomString";
@@ -17,7 +18,7 @@ export async function updatePostAction(
   state: UpdatePostActionState,
   formData: FormData,
 ): Promise<UpdatePostActionState> {
-  // TODO: verificar login do usuário
+  const isAuthenticated = await verifiyLoginSession();
 
   if (!(formData instanceof FormData)) {
     return {
@@ -38,6 +39,12 @@ export async function updatePostAction(
   const formDataToObj = Object.fromEntries(formData.entries());
 
   const zodParsedObj = PostUpdateSchema.safeParse(formDataToObj);
+
+  if (!isAuthenticated)
+    return {
+      formState: state.formState,
+      errors: ["Faça login novamente em outra aba antes de salvar um post"],
+    };
 
   if (!zodParsedObj.success) {
     const errors = getZodErrorMessages(zodParsedObj.error);
