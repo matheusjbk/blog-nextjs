@@ -2,20 +2,32 @@
 
 import {
   FileTextIcon,
+  HourglassIcon,
   HouseIcon,
+  LogOutIcon,
   MenuIcon,
   PlusIcon,
   XIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { NavigationEventsAdmin } from "../NavigationEventsAdmin";
+import { logoutAction } from "@/actions/login/logoutAction";
 
 export function MenuAdmin() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   const linkClasses =
     "[&>svg]:w-4 [&>svg]:w-4 px-4 cursor-pointer flex items-center gap-2 transition hover:bg-slate-800 h-10 shrink-0 rounded-lg";
+
+  function handleLogout(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+
+    startTransition(async () => {
+      await logoutAction();
+    });
+  }
 
   return (
     <>
@@ -66,6 +78,26 @@ export function MenuAdmin() {
           <PlusIcon />
           Criar Post
         </Link>
+
+        <a
+          href="#"
+          className={linkClasses}
+          onClick={handleLogout}
+        >
+          {isPending && (
+            <>
+              <HourglassIcon />
+              Aguarde...
+            </>
+          )}
+
+          {!isPending && (
+            <>
+              <LogOutIcon />
+              Sair
+            </>
+          )}
+        </a>
       </nav>
     </>
   );
