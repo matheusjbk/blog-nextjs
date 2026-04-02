@@ -1,6 +1,6 @@
 "use server";
 
-import { verifiyLoginSession } from "@/lib/login/manage-login";
+import { verifiyLoginSession } from "@/lib/login/manageLogin";
 import { mkdir, writeFile } from "fs/promises";
 import { extname, resolve } from "path";
 

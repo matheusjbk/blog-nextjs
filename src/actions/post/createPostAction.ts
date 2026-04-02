@@ -1,13 +1,13 @@
 "use server";
 
 import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
-import { verifiyLoginSession } from "@/lib/login/manage-login";
+import { verifiyLoginSession } from "@/lib/login/manageLogin";
 import { PostCreateSchema } from "@/lib/validations";
 import { PostModel } from "@/models/post/postModel";
 import { postRepository } from "@/repositories/post";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
 import { makeSlugFromText } from "@/utils/makeSlugFromText";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { v4 as uuidV4 } from "uuid";
 
@@ -75,6 +75,7 @@ export async function createPostAction(
     };
   }
 
-  revalidateTag("posts", "max");
+  updateTag("posts");
+  revalidatePath("/admin/post");
   redirect("/admin/post?created=1");
 }

@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteLoginSession } from "@/lib/login/manage-login";
+import { deleteLoginSession } from "@/lib/login/manageLogin";
 import { simulateDelay } from "@/utils/simulateDelay";
 import { redirect } from "next/navigation";
 

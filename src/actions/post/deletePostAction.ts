@@ -1,8 +1,8 @@
 "use server";
 
-import { verifiyLoginSession } from "@/lib/login/manage-login";
+import { verifiyLoginSession } from "@/lib/login/manageLogin";
 import { postRepository } from "@/repositories/post";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
   const isAuthenticated = await verifiyLoginSession();
@@ -24,8 +24,9 @@ export async function deletePostAction(id: string) {
     return { error: "Erro desconhecido" };
   }
 
-  revalidateTag("posts", "max");
-  revalidateTag(`post-${post.slug}`, "max");
+  updateTag("posts");
+  updateTag(`post-${post.slug}`);
+  revalidatePath("/admin/post");
 
   return { error: "" };
 }

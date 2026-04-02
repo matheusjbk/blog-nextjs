@@ -1,12 +1,12 @@
 "use server";
 
 import { makePartialPostDto, makePostDto, PostDto } from "@/dto/post/postDto";
-import { verifiyLoginSession } from "@/lib/login/manage-login";
+import { verifiyLoginSession } from "@/lib/login/manageLogin";
 import { PostUpdateSchema } from "@/lib/validations";
 import { postRepository } from "@/repositories/post";
 import { generateRandomString } from "@/utils/generateRandomString";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 
 type UpdatePostActionState = {
   formState: PostDto;
@@ -77,8 +77,9 @@ export async function updatePostAction(
     };
   }
 
-  revalidateTag("posts", "max");
-  revalidateTag(`post-${post.slug}`, "max");
+  updateTag("posts");
+  updateTag(`post-${post.slug}`);
+  revalidatePath("/admin/post");
 
   return {
     formState: makePostDto(post),

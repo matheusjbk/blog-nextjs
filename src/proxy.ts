@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyjwt } from "./lib/login/manage-login";
+import { verifyjwt } from "./lib/login/manageLogin";
 
-export default async function middleware(request: NextRequest) {
+export default async function proxy(request: NextRequest) {
   const isLoginPage = request.nextUrl.pathname.includes("login");
   const isAdminPage = request.nextUrl.pathname.includes("/admin");
   const isGetRequest = request.method === "GET";

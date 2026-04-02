@@ -1,16 +1,17 @@
 import { MenuAdmin } from "@/components/admin/MenuAdmin";
-import { requireLoginSessionOrRedirect } from "@/lib/login/manage-login";
+import { SpinLoader } from "@/components/SpinLoader";
+import { Suspense } from "react";
 
 export default async function AdminPostLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  await requireLoginSessionOrRedirect();
-
   return (
     <>
-      <MenuAdmin />
+      <Suspense fallback={<SpinLoader className="mb-16" />}>
+        <MenuAdmin />
+      </Suspense>
       {children}
     </>
   );

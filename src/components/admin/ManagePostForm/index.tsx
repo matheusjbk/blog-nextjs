@@ -4,7 +4,7 @@ import { Button } from "@/components/Button";
 import { InputCheckbox } from "@/components/InputCheckbox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, use, useEffect, useState } from "react";
 import { ImageUploader } from "../ImageUploader";
 import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
 import { createPostAction } from "@/actions/post/createPostAction";
@@ -17,7 +17,7 @@ type ManageCreatePostFormProps = {
 
 type ManageUpdatePostFormProps = {
   mode: "update";
-  postDto?: PostDto;
+  postDto?: PostDto | Promise<PostDto>;
 };
 
 type ManagePostFormProps =
@@ -27,8 +27,17 @@ type ManagePostFormProps =
 export function ManagePostForm(props: ManagePostFormProps) {
   const { mode } = props;
 
-  let postDto;
-  if (mode === "update") postDto = props.postDto;
+  let postDtoProp: PostDto | Promise<PostDto> | undefined = undefined;
+  if (mode === "update") postDtoProp = props.postDto;
+
+  let resolvedPostDto: PostDto | undefined = undefined;
+  if (mode === "update" && postDtoProp) {
+    if (typeof (postDtoProp as PromiseLike<PostDto>).then === "function") {
+      resolvedPostDto = use(postDtoProp as Promise<PostDto>);
+    } else {
+      resolvedPostDto = postDtoProp as PostDto;
+    }
+  }
 
   const actionsMap = {
     create: createPostAction,
@@ -36,7 +45,7 @@ export function ManagePostForm(props: ManagePostFormProps) {
   };
 
   const initialState = {
-    formState: makePartialPostDto(postDto),
+    formState: makePartialPostDto(resolvedPostDto),
     errors: [],
   };
 
