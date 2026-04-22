@@ -7,18 +7,29 @@ import { useEffect } from "react";
 
 export function CreatedPostToatListener() {
   const searchParams = useSearchParams();
-  const created = searchParams.get("created");
+  const postCreated = searchParams.get("postCreated");
+  const userCreated = searchParams.get("userCreated");
   const router = useRouter();
 
   useEffect(() => {
-    if (created === "1") {
+    if (postCreated === "1") {
       showMessage.dismiss();
       showMessage.success("Post criado com sucesso");
       const url = new URL(window.location.href);
-      url.searchParams.delete("created");
+      url.searchParams.delete("postCreated");
       router.replace(url.toString());
     }
-  }, [created, router]);
+  }, [postCreated, router]);
+
+  useEffect(() => {
+    if (userCreated === "1") {
+      showMessage.dismiss();
+      showMessage.success("Conta criada com sucesso");
+      const url = new URL(window.location.href);
+      url.searchParams.delete("userCreated");
+      router.replace(url.toString());
+    }
+  }, [userCreated, router]);
 
   return null;
 }

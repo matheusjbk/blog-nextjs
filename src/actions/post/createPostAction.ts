@@ -77,5 +77,5 @@ export async function createPostAction(
 
   updateTag("posts");
   revalidatePath("/admin/post");
-  redirect("/admin/post?created=1");
+  redirect("/admin/post?postCreated=1");
 }

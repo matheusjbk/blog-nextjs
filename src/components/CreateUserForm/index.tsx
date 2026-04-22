@@ -4,11 +4,25 @@ import { UserRoundIcon } from "lucide-react";
 import { Button } from "../Button";
 import { InputText } from "../InputText";
 import Link from "next/link";
+import { useActionState } from "react";
+import { createUserAction } from "@/actions/user/createUserAction";
+import { PublicUserSchema } from "@/lib/user/schemas";
+
+const initialState = {
+  user: PublicUserSchema.parse({}),
+  errors: [],
+  success: false,
+};
 
 export function CreateUserForm() {
+  const [state, action, isPending] = useActionState(
+    createUserAction,
+    initialState,
+  );
+
   return (
     <form
-      action={""}
+      action={action}
       className="flex flex-col flex-1 gap-6"
     >
       <InputText
@@ -16,8 +30,8 @@ export function CreateUserForm() {
         labelText="Nome"
         name="name"
         placeholder="Seu nome"
-        disabled={false}
-        defaultValue={""}
+        disabled={isPending}
+        defaultValue={state.user.name}
         required
       />
 
@@ -26,8 +40,8 @@ export function CreateUserForm() {
         labelText="E-mail"
         name="email"
         placeholder="Seu e-mail"
-        disabled={false}
-        defaultValue={""}
+        disabled={isPending}
+        defaultValue={state.user.email}
         required
       />
 
@@ -36,7 +50,7 @@ export function CreateUserForm() {
         labelText="Senha"
         name="password"
         placeholder="Sua senha"
-        disabled={false}
+        disabled={isPending}
         required
       />
 
@@ -45,7 +59,7 @@ export function CreateUserForm() {
         labelText="Repetir senha"
         name="password2"
         placeholder="Sua senha novamente"
-        disabled={false}
+        disabled={isPending}
         required
       />
 
@@ -54,10 +68,11 @@ export function CreateUserForm() {
         size="md"
         type="submit"
         className="mt-4"
-        disabled={false}
+        disabled={isPending}
       >
         <UserRoundIcon />
-        Criar conta
+        {!isPending && "Criar conta"}
+        {isPending && "Criando..."}
       </Button>
 
       <p className="text-sm/tight">

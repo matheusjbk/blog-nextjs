@@ -4,6 +4,7 @@ import { loginAction } from "@/actions/login/loginAction";
 import { Button } from "@/components/Button";
 import { InputText } from "@/components/InputText";
 import { LogInIcon } from "lucide-react";
+import Link from "next/link";
 import { useActionState } from "react";
 
 export function LoginForm() {
@@ -45,6 +46,16 @@ export function LoginForm() {
       </Button>
 
       {state.error && <p className="text-red-600">{state.error}</p>}
+
+      <p className="text-sm/tight">
+        Não tem conta? crie uma{" "}
+        <Link
+          href="/user/new"
+          className="text-blue-600"
+        >
+          aqui
+        </Link>
+      </p>
     </form>
   );
 }
