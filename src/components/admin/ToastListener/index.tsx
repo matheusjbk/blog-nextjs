@@ -1,7 +1,6 @@
 "use client";
 
 import { showMessage } from "@/adapters/showMessage";
-import { deleteLoginSession } from "@/lib/login/manageLogin";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";

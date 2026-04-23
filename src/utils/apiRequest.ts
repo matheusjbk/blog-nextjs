@@ -1,3 +1,5 @@
+import "server-only";
+
 type ApiRequestError = {
   errors: string[];
   success: false;
