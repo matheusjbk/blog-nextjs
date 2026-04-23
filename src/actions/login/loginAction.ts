@@ -1,13 +1,14 @@
 "use server";
 
-import { createLoginSession } from "@/lib/login/manageLogin";
-import { verifyPassword } from "@/lib/login/passwordHashing";
-import { simulateDelay } from "@/utils/simulateDelay";
+import { createLoginSessionFromApi } from "@/lib/login/manageLogin";
+import { LoginSchema } from "@/lib/login/schemas";
+import { apiRequest } from "@/utils/apiRequest";
+import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
 import { redirect } from "next/navigation";
 
 type LoginActionState = {
-  username: string;
-  error: string;
+  email: string;
+  errors: string[];
 };
 
 export async function loginAction(state: LoginActionState, formData: FormData) {
@@ -15,40 +16,40 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
 
   if (!allowLogin)
     return {
-      username: "",
-      error: "Login não autorizado",
+      email: "",
+      errors: ["Login não autorizado"],
     };
-
-  await simulateDelay(3000); // manter para dificultar brute force
 
   if (!(formData instanceof FormData))
     return {
-      username: "",
-      error: "Dados inválidos",
+      email: "",
+      errors: ["Dados inválidos"],
     };
 
-  const username = formData.get("username")?.toString().trim() || "";
-  const password = formData.get("password")?.toString().trim() || "";
+  const formObj = Object.fromEntries(formData.entries());
+  const formEmail = formObj?.email?.toString() || "";
+  const parsedFormData = LoginSchema.safeParse(formObj);
 
-  if (!username || !password)
+  if (!parsedFormData.success)
     return {
-      username,
-      error: "Digite o usuário e a senha",
+      email: formEmail,
+      errors: getZodErrorMessages(parsedFormData.error),
     };
 
-  const isValidUsername = username === process.env.LOGIN_USER;
-  const isValidPassword = await verifyPassword(
-    password,
-    process.env.LOGIN_PASS || "",
-  );
+  const response = await apiRequest<{ accessToken: string }>("auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(parsedFormData.data),
+  });
 
-  if (!isValidUsername || !isValidPassword) {
+  if (!response.success)
     return {
-      username,
-      error: "Usuário ou senha inválidos",
+      email: formEmail,
+      errors: response.errors,
     };
-  }
 
-  await createLoginSession(username);
+  await createLoginSessionFromApi(response.data.accessToken);
   redirect("/admin/post");
 }

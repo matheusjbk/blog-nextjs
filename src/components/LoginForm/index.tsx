@@ -9,8 +9,8 @@ import { useActionState } from "react";
 
 export function LoginForm() {
   const initialState = {
-    username: "",
-    error: "",
+    email: "",
+    errors: [],
   };
 
   const [state, action, isPending] = useActionState(loginAction, initialState);
@@ -21,11 +21,13 @@ export function LoginForm() {
       className="flex flex-col flex-1 gap-6"
     >
       <InputText
-        labelText="Usuário"
-        name="username"
-        placeholder="Seu nome de usuário"
+        type="email"
+        labelText="E-mail"
+        name="email"
+        placeholder="Seu e-mail"
         disabled={isPending}
-        defaultValue={state.username}
+        defaultValue={state.email}
+        required
       />
       <InputText
         type="password"
@@ -45,7 +47,15 @@ export function LoginForm() {
         Entrar
       </Button>
 
-      {state.error && <p className="text-red-600">{state.error}</p>}
+      {state.errors &&
+        state.errors.map(error => (
+          <p
+            key={error}
+            className="text-red-600"
+          >
+            {error}
+          </p>
+        ))}
 
       <p className="text-sm/tight">
         Não tem conta? crie uma{" "}

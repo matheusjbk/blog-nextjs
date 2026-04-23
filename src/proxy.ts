@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyjwt } from "./lib/login/manageLogin";
+import { getLoginSessionForApi } from "./lib/login/manageLogin";
 
 export default async function proxy(request: NextRequest) {
   const isLoginPage = request.nextUrl.pathname.includes("login");
@@ -11,14 +11,10 @@ export default async function proxy(request: NextRequest) {
 
   if (!shouldRedirect) return NextResponse.next();
 
-  const jwt = request.cookies.get(
-    process.env.LOGIN_COOKIE_NAME || "loginSession",
-  )?.value;
-
-  const isAuthenticated = await verifyjwt(jwt);
+  const isAuthenticated = await getLoginSessionForApi();
 
   if (!isAuthenticated) {
-    const loginUrl = new URL("/admin/login", request.url);
+    const loginUrl = new URL("/login", request.url);
     return NextResponse.redirect(loginUrl);
   }
 

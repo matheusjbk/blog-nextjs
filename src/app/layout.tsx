@@ -4,7 +4,7 @@ import { Container } from "@/components/Container";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { MessagesContainer } from "@/components/MessagesContainer";
-import { CreatedPostToatListener } from "@/components/admin/CreatedPostToastListener";
+import { ToastListener } from "@/components/admin/ToastListener";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default function RootLayout({
         </Container>
 
         <Suspense fallback={null}>
-          <CreatedPostToatListener />
+          <ToastListener />
         </Suspense>
         <MessagesContainer />
       </body>

@@ -4,9 +4,10 @@ import { UserRoundIcon } from "lucide-react";
 import { Button } from "../Button";
 import { InputText } from "../InputText";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { createUserAction } from "@/actions/user/createUserAction";
 import { PublicUserSchema } from "@/lib/user/schemas";
+import { showMessage } from "@/adapters/showMessage";
 
 const initialState = {
   user: PublicUserSchema.parse({}),
@@ -19,6 +20,13 @@ export function CreateUserForm() {
     createUserAction,
     initialState,
   );
+
+  useEffect(() => {
+    showMessage.dismiss();
+
+    if (state.errors.length > 0)
+      state.errors.forEach(error => showMessage.error(error));
+  }, [state]);
 
   return (
     <form

@@ -24,10 +24,11 @@ export async function apiRequest<T>(
     const response = await fetch(url, options);
     const json = await response.json().catch(() => null);
 
+    let errors;
+
     if (!response.ok) {
-      const errors = Array.isArray(json?.message)
-        ? json.message
-        : [json?.message || "Erro inesperado"];
+      if (json.detail) errors = [json.detail];
+      else errors = json.messages;
 
       return {
         errors,
