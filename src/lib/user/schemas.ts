@@ -30,7 +30,6 @@ export const CreateUserSchema = CreateUserBase.refine(
 });
 
 export const PublicUserSchema = z.object({
-  id: z.string().default(""),
   name: z.string().default(""),
   email: z.string().default(""),
 });

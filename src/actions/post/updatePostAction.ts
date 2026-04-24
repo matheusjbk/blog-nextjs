@@ -2,7 +2,7 @@
 
 import { makePartialPostDto, makePostDto, PostDto } from "@/dto/post/postDto";
 import { verifiyLoginSession } from "@/lib/login/manageLogin";
-import { PostUpdateSchema } from "@/lib/validations";
+import { PostUpdateSchema } from "@/lib/post/schemas";
 import { postRepository } from "@/repositories/post";
 import { generateRandomString } from "@/utils/generateRandomString";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";

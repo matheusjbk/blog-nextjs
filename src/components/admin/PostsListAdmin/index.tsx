@@ -1,10 +1,23 @@
-import { findAllPostsAdmin } from "@/lib/queries/admin";
+import { findAllPostsFromApiAdmin } from "@/lib/queries/admin";
 import Link from "next/link";
 import { DeletePostButton } from "../DeletePostButton";
 import { ErrorMessage } from "@/components/ErrorMessage";
 
 export default async function PostsListAdmin() {
-  const posts = await findAllPostsAdmin();
+  const postsResponse = await findAllPostsFromApiAdmin();
+
+  if (!postsResponse.success) {
+    console.log(postsResponse.errors);
+
+    return (
+      <ErrorMessage
+        contentTitle="Ops!"
+        content="Tente fazer login novamente"
+      />
+    );
+  }
+
+  const posts = postsResponse.data;
 
   if (posts.length === 0)
     return (
