@@ -20,7 +20,7 @@ export type PostModelFromApi = {
   excerpt: string;
   content: string;
   coverImageUrl: string;
-  published: boolean;
+  active: boolean;
   createdAt: string;
   updatedAt: string;
   author: PublicUserDto;

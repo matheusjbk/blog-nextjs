@@ -4,12 +4,15 @@ import { Button } from "@/components/Button";
 import { InputCheckbox } from "@/components/InputCheckbox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useActionState, use, useEffect, useState } from "react";
+import { useActionState, use, useEffect, useState, useRef } from "react";
 import { ImageUploader } from "../ImageUploader";
-import { makePartialPostDto, PostDto } from "@/dto/post/postDto";
 import { createPostAction } from "@/actions/post/createPostAction";
 import { showMessage } from "@/adapters/showMessage";
 import { updatePostAction } from "@/actions/post/updatePostAction";
+import {
+  PublicPostForApiDto,
+  PublicPostForApiSchema,
+} from "@/lib/post/schemas";
 
 type ManageCreatePostFormProps = {
   mode: "create";
@@ -17,7 +20,7 @@ type ManageCreatePostFormProps = {
 
 type ManageUpdatePostFormProps = {
   mode: "update";
-  postDto?: PostDto | Promise<PostDto>;
+  postDto?: PublicPostForApiDto | Promise<PublicPostForApiDto>;
 };
 
 type ManagePostFormProps =
@@ -27,15 +30,21 @@ type ManagePostFormProps =
 export function ManagePostForm(props: ManagePostFormProps) {
   const { mode } = props;
 
-  let postDtoProp: PostDto | Promise<PostDto> | undefined = undefined;
+  let postDtoProp:
+    | PublicPostForApiDto
+    | Promise<PublicPostForApiDto>
+    | undefined = undefined;
   if (mode === "update") postDtoProp = props.postDto;
 
-  let resolvedPostDto: PostDto | undefined = undefined;
+  let resolvedPostDto: PublicPostForApiDto | undefined = undefined;
   if (mode === "update" && postDtoProp) {
-    if (typeof (postDtoProp as PromiseLike<PostDto>).then === "function") {
-      resolvedPostDto = use(postDtoProp as Promise<PostDto>);
+    if (
+      typeof (postDtoProp as PromiseLike<PublicPostForApiDto>).then ===
+      "function"
+    ) {
+      resolvedPostDto = use(postDtoProp as Promise<PublicPostForApiDto>);
     } else {
-      resolvedPostDto = postDtoProp as PostDto;
+      resolvedPostDto = postDtoProp as PublicPostForApiDto;
     }
   }
 
@@ -45,7 +54,7 @@ export function ManagePostForm(props: ManagePostFormProps) {
   };
 
   const initialState = {
-    formState: makePartialPostDto(resolvedPostDto),
+    formState: PublicPostForApiSchema.parse(resolvedPostDto || {}),
     errors: [],
   };
 
@@ -65,10 +74,13 @@ export function ManagePostForm(props: ManagePostFormProps) {
       state.errors.forEach(error => showMessage.error(error));
   }, [state.errors]);
 
+  const shownSuccessId = useRef<string | null>(null);
+
   useEffect(() => {
-    if (state.success) {
+    if (state.success && state.success !== shownSuccessId.current) {
       showMessage.dismiss();
       showMessage.success("Post atualizado com sucesso");
+      shownSuccessId.current = state.success;
     }
   }, [state.success]);
 
@@ -95,15 +107,6 @@ export function ManagePostForm(props: ManagePostFormProps) {
           defaultValue={formState.slug}
           disabled={isPending}
           readOnly
-        />
-
-        <InputText
-          labelText="Autor"
-          name="author"
-          placeholder="Digite o nome do autor"
-          type="text"
-          defaultValue={formState.author}
-          disabled={isPending}
         />
 
         <InputText
@@ -145,8 +148,8 @@ export function ManagePostForm(props: ManagePostFormProps) {
 
         <InputCheckbox
           labelText="Publicar post"
-          name="published"
-          defaultChecked={formState.published}
+          name="active"
+          defaultChecked={formState.active}
           disabled={isPending}
         />
 

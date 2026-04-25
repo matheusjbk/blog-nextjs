@@ -27,7 +27,7 @@ const PostBaseSchema = z.object({
   coverImageUrl: z.string().trim().refine(isUrlOrRelativePath, {
     message: "URL da capa deve ser uma URL ou caminho para imagem",
   }),
-  published: z
+  active: z
     .union([
       z.literal("on"),
       z.literal("true"),

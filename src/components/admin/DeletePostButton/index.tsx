@@ -26,8 +26,8 @@ export function DeletePostButton({ id, title }: DeletePostButtonProps) {
       const result = await deletePostAction(id);
       setShowDialog(false);
 
-      if (result.error) {
-        showMessage.error(result.error);
+      if (result.errors) {
+        result.errors.map(error => showMessage.error(error));
         return;
       }
 

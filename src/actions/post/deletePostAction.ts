@@ -1,32 +1,54 @@
 "use server";
 
-import { verifiyLoginSession } from "@/lib/login/manageLogin";
-import { postRepository } from "@/repositories/post";
+import { getLoginSessionForApi } from "@/lib/login/manageLogin";
+import {
+  PublicPostForApiDto,
+  PublicPostForApiSchema,
+} from "@/lib/post/schemas";
+import { authenticatedApiRequest } from "@/utils/authenticatedApiRequest";
 import { revalidatePath, updateTag } from "next/cache";
 
 export async function deletePostAction(id: string) {
-  const isAuthenticated = await verifiyLoginSession();
+  const isAuthenticated = await getLoginSessionForApi();
 
   if (!isAuthenticated)
     return {
-      error: "Faça login novamente em outra aba antes de excluir um post",
+      errors: ["Faça login novamente em outra aba antes de excluir um post"],
     };
 
-  if (!id || typeof id !== "string") return { error: "Dados inválidos" };
+  if (!id || typeof id !== "string") return { errors: ["Dados inválidos"] };
 
-  let post;
+  const postResponse = await authenticatedApiRequest<PublicPostForApiDto>(
+    `post/me/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
 
-  try {
-    post = await postRepository.delete(id);
-  } catch (e: unknown) {
-    if (e instanceof Error) return { error: e.message };
+  const post = postResponse.success
+    ? postResponse.data
+    : PublicPostForApiSchema.parse({});
 
-    return { error: "Erro desconhecido" };
-  }
+  const response = await authenticatedApiRequest<PublicPostForApiDto>(
+    `post/me/${id}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (!response.success)
+    return {
+      errors: response.errors,
+    };
 
   updateTag("posts");
   updateTag(`post-${post.slug}`);
   revalidatePath("/admin/post");
 
-  return { error: "" };
+  return { errors: [] };
 }

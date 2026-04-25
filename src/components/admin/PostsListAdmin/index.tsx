@@ -32,12 +32,12 @@ export default async function PostsListAdmin() {
       {posts.map(post => {
         return (
           <div
-            className={`p-2 ${!post.published ? "bg-slate-300" : ""} flex gap-2 items-center justify-between`}
+            className={`p-2 ${!post.active ? "bg-slate-300" : ""} flex gap-2 items-center justify-between`}
             key={post.id}
           >
             <Link href={`/admin/post/${post.id}`}>{post.title}</Link>
 
-            {!post.published && (
+            {!post.active && (
               <span className="text-xs italic text-slate-600">
                 (Não publicado)
               </span>
