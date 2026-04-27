@@ -1,8 +1,9 @@
-import { findPublishedPostBySlugCached } from "@/lib/queries/public";
+import { findPublishedPostBySlugFromApiCached } from "@/lib/queries/public";
 // import Image from "next/image";
 import { PostDate } from "../PostDate";
 import { PostHeading } from "../PostHeading";
 import { SafeMarkdown } from "../SafeMarkdown";
+import { notFound } from "next/navigation";
 
 type SinglePostProps = {
   slug: Promise<{ slug: string }>;
@@ -10,7 +11,11 @@ type SinglePostProps = {
 
 export async function SinglePost({ slug }: SinglePostProps) {
   const { slug: postSlug } = await slug;
-  const post = await findPublishedPostBySlugCached(postSlug);
+  const response = await findPublishedPostBySlugFromApiCached(postSlug);
+
+  if (!response.success) notFound();
+
+  const post = response.data;
 
   return (
     <article className="mb-16">
@@ -38,7 +43,7 @@ export async function SinglePost({ slug }: SinglePostProps) {
         </PostHeading>
 
         <p>
-          {post.author} | <PostDate dateTime={post.createdAt} />
+          {post.author.name} | <PostDate dateTime={post.createdAt} />
         </p>
       </header>
 

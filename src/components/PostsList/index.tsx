@@ -1,8 +1,12 @@
 import { Post } from "../Post";
-import { findAllPublishedPostsCached } from "@/lib/queries/public";
+import { findAllPublishedPostsFromApiCached } from "@/lib/queries/public";
 
 export async function PostsList() {
-  const posts = await findAllPublishedPostsCached();
+  const response = await findAllPublishedPostsFromApiCached();
+
+  if (!response.success) return null;
+
+  const posts = response.data;
 
   if (posts.length <= 1) return null;
 
