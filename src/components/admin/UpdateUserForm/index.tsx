@@ -4,7 +4,12 @@ import { Button } from "@/components/Button";
 import { Dialog } from "@/components/Dialog";
 import { InputText } from "@/components/InputText";
 import { simulateDelay } from "@/utils/simulateDelay";
-import { LockKeyholeIcon, UserPenIcon, UserRoundXIcon } from "lucide-react";
+import {
+  LockKeyholeIcon,
+  UserPenIcon,
+  UserRoundPenIcon,
+  UserRoundXIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 
@@ -56,7 +61,7 @@ export function UpdateUserForm() {
             disabled={isElementDisabled}
             type="submit"
           >
-            <UserPenIcon /> Atualizar perfil
+            <UserRoundPenIcon /> Atualizar perfil
           </Button>
         </div>
 
