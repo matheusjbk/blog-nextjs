@@ -4,6 +4,7 @@ import { createLoginSessionFromApi } from "@/lib/login/manageLogin";
 import { LoginSchema } from "@/lib/login/schemas";
 import { apiRequest } from "@/utils/apiRequest";
 import { getZodErrorMessages } from "@/utils/getZodErrorMessages";
+import { verifyHoneypotInput } from "@/utils/verifyHoneypotInput";
 import { redirect } from "next/navigation";
 
 type LoginActionState = {
@@ -18,6 +19,14 @@ export async function loginAction(state: LoginActionState, formData: FormData) {
     return {
       email: "",
       errors: ["Login não autorizado"],
+    };
+
+  const isBot = await verifyHoneypotInput(formData);
+
+  if (isBot)
+    return {
+      email: "",
+      errors: ["Bot detectado"],
     };
 
   if (!(formData instanceof FormData))

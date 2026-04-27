@@ -6,6 +6,7 @@ import { InputText } from "@/components/InputText";
 import { LogInIcon } from "lucide-react";
 import Link from "next/link";
 import { useActionState } from "react";
+import { HoneypotInput } from "../HoneypotInput";
 
 export function LoginForm() {
   const initialState = {
@@ -29,6 +30,7 @@ export function LoginForm() {
         defaultValue={state.email}
         required
       />
+
       <InputText
         type="password"
         labelText="Senha"
@@ -36,6 +38,9 @@ export function LoginForm() {
         placeholder="Sua senha"
         disabled={isPending}
       />
+
+      <HoneypotInput />
+
       <Button
         color="default"
         size="md"

@@ -8,6 +8,7 @@ import { useActionState, useEffect } from "react";
 import { createUserAction } from "@/actions/user/createUserAction";
 import { PublicUserSchema } from "@/lib/user/schemas";
 import { showMessage } from "@/adapters/showMessage";
+import { HoneypotInput } from "../HoneypotInput";
 
 const initialState = {
   user: PublicUserSchema.parse({}),
@@ -70,6 +71,8 @@ export function CreateUserForm() {
         disabled={isPending}
         required
       />
+
+      <HoneypotInput />
 
       <Button
         color="default"
