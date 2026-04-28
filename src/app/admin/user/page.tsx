@@ -1,4 +1,4 @@
-import { UpdateUserForm } from "@/components/admin/UpdateUserForm";
+import { UpdateUser } from "@/components/admin/UpdateUser";
 import { SpinLoader } from "@/components/SpinLoader";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -11,7 +11,7 @@ export default async function AdminUserPage() {
   return (
     <Suspense fallback={<SpinLoader className="mb-16" />}>
       <div className="max-w-sm flex items-center justify-center text-center mt-16 mb-32 mx-auto">
-        <UpdateUserForm />
+        <UpdateUser />
       </div>
     </Suspense>
   );
