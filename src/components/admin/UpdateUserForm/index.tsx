@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteUserAction } from "@/actions/user/deleteUserAction";
 import { updateUserAction } from "@/actions/user/updateUserAction";
 import { showMessage } from "@/adapters/showMessage";
 import { Button } from "@/components/Button";
@@ -59,7 +60,20 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
     }
   }, [state]);
 
-  function handleDeleteUserAccount() {}
+  function handleDeleteUserAccount() {
+    startTransition(async () => {
+      if (!confirm("Tem certeza que deseja apagar sua conta?")) return;
+
+      const result = await deleteUserAction();
+
+      if (result.errors) {
+        showMessage.dismiss();
+        result.errors.forEach(error => showMessage.error(error));
+      }
+
+      setIsDialogVisible(false);
+    });
+  }
 
   return (
     <>
