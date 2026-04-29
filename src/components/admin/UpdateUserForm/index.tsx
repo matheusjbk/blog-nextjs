@@ -131,9 +131,9 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
         content={
           <p>
             Ao apagar sua conta, seus dados e todos os seus posts também serão
-            excluídos. Essa ação é irreversível. Clique em <b>OK</b> para
-            confirmar ou em <b>Cancelar</b> para fechar essa janela. Em alguns
-            segundos os botões serão liberados.
+            excluídos. Essa ação é irreversível. Clique em <b>Confirmar</b> para
+            deletar seus dados ou em <b>Cancelar</b> para fechar essa janela. Em
+            alguns segundos os botões serão liberados.
           </p>
         }
         disabled={isElementDisabled}

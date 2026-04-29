@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { MessagesContainer } from "@/components/MessagesContainer";
 import { ToastListener } from "@/components/admin/ToastListener";
 import { Suspense } from "react";
+import { SpinLoader } from "@/components/SpinLoader";
 
 export const metadata: Metadata = {
   title: {
@@ -28,7 +29,9 @@ export default function RootLayout({
     >
       <body>
         <Container>
-          <Header />
+          <Suspense fallback={<SpinLoader />}>
+            <Header />
+          </Suspense>
 
           {children}
 

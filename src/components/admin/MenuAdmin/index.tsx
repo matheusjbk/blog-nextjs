@@ -22,7 +22,7 @@ export function MenuAdmin() {
   const [isPending, startTransition] = useTransition();
 
   const linkClasses =
-    "[&>svg]:w-4 [&>svg]:w-4 px-4 cursor-pointer flex items-center gap-2 transition hover:bg-slate-800 h-10 shrink-0 rounded-lg";
+    "[&>svg]:w-4 [&>svg]:h-4 px-4 cursor-pointer flex items-center gap-2 transition hover:bg-slate-800 h-10 shrink-0 rounded-lg";
 
   function toggleMenu() {
     if (isOpen) {
