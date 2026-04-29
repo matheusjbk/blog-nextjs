@@ -4,7 +4,7 @@ import { Button } from "@/components/Button";
 import { InputCheckbox } from "@/components/InputCheckbox";
 import { InputText } from "@/components/InputText";
 import { MarkdownEditor } from "@/components/MarkdownEditor";
-import { useActionState, use, useEffect, useState, useRef } from "react";
+import { useActionState, useEffect, useState, useRef } from "react";
 import { ImageUploader } from "../ImageUploader";
 import { createPostAction } from "@/actions/post/createPostAction";
 import { showMessage } from "@/adapters/showMessage";
@@ -20,7 +20,7 @@ type ManageCreatePostFormProps = {
 
 type ManageUpdatePostFormProps = {
   mode: "update";
-  postDto?: PublicPostForApiDto | Promise<PublicPostForApiDto>;
+  postDto?: PublicPostForApiDto;
 };
 
 type ManagePostFormProps =
@@ -30,22 +30,9 @@ type ManagePostFormProps =
 export function ManagePostForm(props: ManagePostFormProps) {
   const { mode } = props;
 
-  let postDtoProp:
-    | PublicPostForApiDto
-    | Promise<PublicPostForApiDto>
-    | undefined = undefined;
-  if (mode === "update") postDtoProp = props.postDto;
-
-  let resolvedPostDto: PublicPostForApiDto | undefined = undefined;
-  if (mode === "update" && postDtoProp) {
-    if (
-      typeof (postDtoProp as PromiseLike<PublicPostForApiDto>).then ===
-      "function"
-    ) {
-      resolvedPostDto = use(postDtoProp as Promise<PublicPostForApiDto>);
-    } else {
-      resolvedPostDto = postDtoProp as PublicPostForApiDto;
-    }
+  let postDto;
+  if (mode === "update") {
+    postDto = props.postDto;
   }
 
   const actionsMap = {
@@ -54,7 +41,7 @@ export function ManagePostForm(props: ManagePostFormProps) {
   };
 
   const initialState = {
-    formState: PublicPostForApiSchema.parse(resolvedPostDto || {}),
+    formState: PublicPostForApiSchema.parse(postDto || {}),
     errors: [],
   };
 

@@ -1,6 +1,5 @@
-import { ManagePostForm } from "@/components/admin/ManagePostForm";
+import { SearchPost } from "@/components/admin/SearchPost";
 import { SpinLoader } from "@/components/SpinLoader";
-import { searchPost } from "@/lib/post/searchPost";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -17,16 +16,11 @@ export default async function AdminPostIdPage({
 }: AdminPostIdPageProps) {
   const id = params.then(p => ({ id: p.id }));
 
-  const postDto = searchPost(id);
-
   return (
     <>
       <h1 className="text-3xl font-bold mb-6">Editar Post</h1>
       <Suspense fallback={<SpinLoader className="mb-16" />}>
-        <ManagePostForm
-          mode="update"
-          postDto={postDto}
-        />
+        <SearchPost idPromise={id} />
       </Suspense>
     </>
   );

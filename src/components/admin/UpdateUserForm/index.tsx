@@ -13,7 +13,13 @@ import {
   UserRoundXIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useActionState, useEffect, useState, useTransition } from "react";
+import {
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 
 type UpdateUserFormProps = {
   user: PublicUserDto;
@@ -28,6 +34,7 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
   const [isDialogVisible, setIsDialogVisible] = useState(false);
   const [isTransitioning, startTransition] = useTransition();
   const isElementDisabled = isTransitioning || isPending;
+  const lastSuccessUserRef = useRef(user);
 
   function showDeleteAccountDialog(
     e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
@@ -46,8 +53,9 @@ export function UpdateUserForm({ user }: UpdateUserFormProps) {
       state.errors.forEach(error => showMessage.error(error));
     }
 
-    if (state.success) {
+    if (state.success && state.user !== lastSuccessUserRef.current) {
       showMessage.success("Perfil atualizado com sucesso!");
+      lastSuccessUserRef.current = state.user;
     }
   }, [state]);
 
