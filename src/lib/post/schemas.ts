@@ -41,10 +41,6 @@ const PostBaseSchema = z.object({
     .transform(value => value === "on" || value === "true" || value === true),
 });
 
-export const PostCreateSchema = PostBaseSchema;
-
-export const PostUpdateSchema = PostBaseSchema.extend({});
-
 export const CreatePostForApiSchema = PostBaseSchema.omit({
   author: true,
 }).extend({});
