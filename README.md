@@ -92,12 +92,7 @@ docker network create theblog-network
 
 ### Passo 3: Configurar Variáveis de Ambiente
 
-Na raiz do projeto, crie um arquivo `.env` com as seguintes variáveis:
-
-```env
-# URL da API Backend
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
+Copie o arquivo `.env.local-example` e, na raiz do projeto, crie um novo arquivo chamado `.env` e cole o conteúdo.
 
 ### Passo 4: Inicializar o Frontend
 
