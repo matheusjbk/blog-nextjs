@@ -3,6 +3,7 @@
 import { deleteLoginSession } from "@/lib/login/manageLogin";
 import { getUserFromApi } from "@/lib/user/api/getUser";
 import { authenticatedApiRequest } from "@/utils/authenticatedApiRequest";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 type DeleteUserActionState = {
@@ -36,5 +37,6 @@ export async function deleteUserAction(): Promise<DeleteUserActionState> {
     };
 
   await deleteLoginSession();
+  updateTag("posts");
   redirect("/");
 }
